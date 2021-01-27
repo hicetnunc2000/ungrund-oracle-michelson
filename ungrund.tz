@@ -1,0 +1,275 @@
+# @hicetnunc2000
+
+parameter (or (or (nat %cancelRequest) (unit %default)) (or (pair %fullFillRequest (nat %reqId) (nat %result)) (pair %requestsQueue (string %link) (pair (nat %mult) (string %path)))));
+storage   (pair (big_map %queue nat (pair (address %callback) (pair (bool %filled) (pair %payload (string %link) (pair (nat %mult) (string %path)))))) (pair (nat %reqId) (address %worker)));
+code
+  {
+    LAMBDA
+      (pair (address %in_param) (pair %in_storage (big_map %queue nat (pair (address %callback) (pair (bool %filled) (pair %payload (string %link) (pair (nat %mult) (string %path)))))) (pair (nat %reqId) (address %worker))))
+      (pair (list %operations operation) (pair (bool %result) (pair %storage (big_map %queue nat (pair (address %callback) (pair (bool %filled) (pair %payload (string %link) (pair (nat %mult) (string %path)))))) (pair (nat %reqId) (address %worker)))))
+      {
+        NIL operation;
+        SWAP;
+        DUP;
+        CDR;
+        SWAP;
+        CAR;
+        PACK;
+        PUSH nat 3;
+        PUSH nat 4;
+        SLICE;
+        IF_SOME
+          {}
+          {
+            PUSH int 49;
+            FAILWITH;
+          };
+        PUSH bytes 0x001601;
+        COMPARE;
+        EQ;
+        PAIR;
+        SWAP;
+        PAIR;
+      };
+    SWAP;
+    DUP;
+    CDR;
+    SWAP;
+    CAR;
+    IF_LEFT
+      {
+        DIG 2;
+        DROP;
+        IF_LEFT
+          {
+            SWAP;
+            DUP;
+            DUG 2;
+            CDR;
+            CDR;
+            SENDER;
+            COMPARE;
+            EQ;
+            IF
+              {}
+              {
+                PUSH string "WrongCondition: sp.sender == self.data.worker";
+                FAILWITH;
+              };
+            SWAP;
+            DUP;
+            CDR;
+            SWAP;
+            CAR;
+            DUP;
+            DIG 3;
+            DUP;
+            DUG 2;
+            GET;
+            IF_SOME
+              {}
+              {
+                PUSH int 41;
+                FAILWITH;
+              };
+            DUP;
+            CAR;
+            SWAP;
+            CDR;
+            CDR;
+            PUSH bool True;
+            PAIR;
+            SWAP;
+            PAIR;
+            SOME;
+            SWAP;
+            UPDATE;
+            PAIR;
+          }
+          {
+            DROP;
+          };
+        NIL operation;
+      }
+      {
+        IF_LEFT
+          {
+            DIG 2;
+            DROP;
+            SWAP;
+            DUP;
+            DUG 2;
+            CDR;
+            CDR;
+            SENDER;
+            COMPARE;
+            EQ;
+            IF
+              {}
+              {
+                PUSH string "WrongCondition: sp.sender == self.data.worker";
+                FAILWITH;
+              };
+            NIL operation;
+            DIG 2;
+            DUP;
+            DUG 3;
+            CAR;
+            DIG 2;
+            DUP;
+            DUG 3;
+            CAR;
+            GET;
+            IF_SOME
+              {}
+              {
+                PUSH int 28;
+                FAILWITH;
+              };
+            CAR;
+            CONTRACT %ungrundResponse nat;
+            IF_SOME
+              {}
+              {
+                PUSH int 28;
+                FAILWITH;
+              };
+            PUSH mutez 0;
+            DIG 3;
+            DUP;
+            DUG 4;
+            CDR;
+            TRANSFER_TOKENS;
+            CONS;
+            DIG 2;
+            DUP;
+            CDR;
+            SWAP;
+            CAR;
+            DUP;
+            DIG 4;
+            CAR;
+            DUP;
+            DUG 2;
+            GET;
+            IF_SOME
+              {}
+              {
+                PUSH int 36;
+                FAILWITH;
+              };
+            DUP;
+            CAR;
+            SWAP;
+            CDR;
+            CDR;
+            PUSH bool True;
+            PAIR;
+            SWAP;
+            PAIR;
+            SOME;
+            SWAP;
+            UPDATE;
+            PAIR;
+            SWAP;
+          }
+          {
+            PUSH mutez 5000;
+            AMOUNT;
+            COMPARE;
+            GE;
+            IF
+              {}
+              {
+                PUSH string "WrongCondition: sp.amount >= sp.mutez(5000)";
+                FAILWITH;
+              };
+            NIL operation;
+            DIG 2;
+            DUP;
+            DUG 3;
+            CDR;
+            CDR;
+            CONTRACT unit;
+            IF_SOME
+              {}
+              {
+                PUSH int 16;
+                FAILWITH;
+              };
+            AMOUNT;
+            UNIT;
+            TRANSFER_TOKENS;
+            CONS;
+            DIG 3;
+            DUP;
+            DUG 4;
+            DIG 3;
+            SENDER;
+            PAIR;
+            EXEC;
+            DUP;
+            CDR;
+            CDR;
+            DUG 3;
+            DUP;
+            CAR;
+            ITER
+              {
+                DIG 2;
+                SWAP;
+                CONS;
+                SWAP;
+              };
+            CDR;
+            CAR;
+            IF
+              {
+                DIG 3;
+                DROP;
+                DIG 2;
+                DUP;
+                DUG 3;
+                DUP;
+                CDR;
+                SWAP;
+                CAR;
+                DIG 4;
+                CDR;
+                CAR;
+                DIG 4;
+                PUSH bool False;
+                PAIR;
+                SENDER;
+                PAIR;
+                SOME;
+                SWAP;
+                UPDATE;
+                SWAP;
+                DUP;
+                CDR;
+                SWAP;
+                CAR;
+                PUSH nat 1;
+                ADD;
+                PAIR;
+                SWAP;
+                PAIR;
+                SWAP;
+              }
+              {
+                SWAP;
+                DROP;
+                DIG 2;
+                DROP;
+              };
+          };
+      };
+    NIL operation;
+    SWAP;
+    ITER
+      {
+        CONS;
+      };
+    PAIR;
+  };

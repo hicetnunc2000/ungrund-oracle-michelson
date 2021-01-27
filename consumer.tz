@@ -1,0 +1,59 @@
+# @hicetnunc2000
+
+parameter (or (pair %requestData (string %link) (pair (nat %mult) (string %path))) (nat %ungrundResponse));
+storage   (pair (address %adm) (pair (address %oracle) (nat %result)));
+code
+  {
+    DUP;
+    CDR;
+    SWAP;
+    CAR;
+    IF_LEFT
+      {
+        SWAP;
+        DUP;
+        DUG 2;
+        CAR;
+        SENDER;
+        COMPARE;
+        EQ;
+        IF
+          {}
+          {
+            PUSH string "WrongCondition: sp.sender == self.data.adm";
+            FAILWITH;
+          };
+        NIL operation;
+        DIG 2;
+        DUP;
+        DUG 3;
+        CDR;
+        CAR;
+        CONTRACT %requestsQueue (pair (string %link) (pair (nat %mult) (string %path)));
+        IF_SOME
+          {}
+          {
+            PUSH int 68;
+            FAILWITH;
+          };
+        AMOUNT;
+        DIG 3;
+        TRANSFER_TOKENS;
+        CONS;
+      }
+      {
+        SWAP;
+        DUP;
+        CAR;
+        SWAP;
+        CDR;
+        CAR;
+        DIG 2;
+        SWAP;
+        PAIR;
+        SWAP;
+        PAIR;
+        NIL operation;
+      };
+    PAIR;
+  };
